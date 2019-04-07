@@ -1,22 +1,10 @@
--- drop user postgres;
--- create user postgres with password 'postgres'
---   superuser
---   createdb
---   createrole
---   replication
---   bypassrls;
---
--- create database postgres
---   encoding = 'UTF8'
---   connection limit = -1;
-
 grant all privileges on database postgres to postgres;
 
 create table if not exists orders
 (
   id      serial primary key,
   created timestamp default now() CHECK (created <= now()),
-  count   integer
+  count   integer check (count >= 0)
 );
 
 create table if not exists items
@@ -31,7 +19,7 @@ create table if not exists masters
   id       serial primary key,
   name     varchar,
   lastname varchar,
-  birthday date /*CHECK (birthday <= now() && (extract(year from now()) - extract(year from birthday) >= 18))*/,
+  birthday date CHECK (birthday <= now() and (extract(year from now()) - extract(year from birthday) >= 18)),
   address  varchar
 );
 
@@ -50,3 +38,7 @@ alter table items
 
 alter table masters
   owner to postgres;
+
+-- FILL DATA TO TABLES
+
+
