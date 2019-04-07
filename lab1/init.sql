@@ -1,7 +1,14 @@
-create user postgres with password 'postgres';
-create database postgres
-  encoding = 'UTF8'
-  connection limit = -1;
+-- drop user postgres;
+-- create user postgres with password 'postgres'
+--   superuser
+--   createdb
+--   createrole
+--   replication
+--   bypassrls;
+--
+-- create database postgres
+--   encoding = 'UTF8'
+--   connection limit = -1;
 
 grant all privileges on database postgres to postgres;
 
@@ -24,7 +31,7 @@ create table if not exists masters
   id       serial primary key,
   name     varchar,
   lastname varchar,
-  birthday date CHECK (birthday <= now() && (extract(year from now()) - extract(year from birthday) >= 18)),
+  birthday date /*CHECK (birthday <= now() && (extract(year from now()) - extract(year from birthday) >= 18))*/,
   address  varchar
 );
 
