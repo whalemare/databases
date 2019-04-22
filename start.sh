@@ -7,6 +7,10 @@ cat lab1/database.sql >> init.sql
 # lab2
 cat lab2/function.sql >> init.sql
 
+# lab3
+cat lab3/arrays.sql >> init.sql
+cat lab3/selectors.sql >> init.sql
+
 docker kill $(docker ps -q)
 docker rm $(docker ps -a -q)
 docker-compose up -d postgresql
