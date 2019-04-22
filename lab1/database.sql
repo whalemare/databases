@@ -6,15 +6,6 @@ create table if not exists cities
   name varchar
 );
 
-create table if not exists masters
-(
-  id       serial primary key,
-  name     varchar,
-  lastname varchar,
-  birthday date CHECK (birthday <= now() and (extract(year from now()) - extract(year from birthday) >= 18)),
-  address  varchar
-);
-
 create table if not exists orders
 (
   id      serial primary key,
@@ -24,9 +15,19 @@ create table if not exists orders
 
 create table if not exists items
 (
-  id   serial primary key,
-  type varchar,
+  id    serial primary key,
+  type  varchar,
   price integer
+);
+
+create table masters
+(
+  id       serial primary key,
+  name     varchar,
+  lastname varchar,
+  birthday date CHECK (birthday <= now() and (extract(year from now()) - extract(year from birthday) >= 18)),
+  address  varchar,
+  item     int references items (id)
 );
 
 -- region ADD PERMISSIONS
@@ -57,22 +58,6 @@ values ('Новосибирск'),
        ('Сызрань'),
        ('Новгород');
 
--- year/month/day
-insert into masters (name, lastname, birthday, address)
-values ('Александр', 'Кузьмин', '1932/08/12',
-        '121352, г. Красноармейская, ул. Магистральный Переулок, дом 65, квартира 278'),
-       ('Роза', 'Лебедева', '1970/01/12', '164549, г. Рыбная Слобода, ул. Одоевского Проезд, дом 80, квартира 128'),
-       ('Василиса', 'Баландина', '1960/01/12',
-        '453238, г. Вадинск, ул. Воздвиженский 2-й Переулок, дом 47, квартира 71'),
-       ('Викторина', 'Трифонова', '1984/01/12',
-        '453238, г. Вадинск, ул. Воздвиженский 2-й Переулок, дом 47, квартира 71'),
-       ('Мая', 'Кудрявцева', '1963/08/11', '453238, г. Вадинск, ул. Воздвиженский 2-й Переулок, дом 47, квартира 71'),
-       ('Адам', 'Попов', '1993/08/10', '433252, г. Нилово, ул. Котельнический 5-й Переулок, дом 37, квартира 269'),
-       ('Илья', 'Кириллов', '1953/08/09', '453238, г. Вадинск, ул. Воздвиженский 2-й Переулок, дом 47, квартира 71'),
-       ('Сергей', 'Бордунов', '1986/08/08', '453238, г. Вадинск, ул. Воздвиженский 2-й Переулок, дом 47, квартира 71'),
-       ('Валентин', 'Емельянов', '1996/08/07', '601624, г. Скалистый, ул. Подсосенский Переулок, дом 66, квартира 280'),
-       ('Жора', 'Власов', '1968/08/06', '428014, г. Яровое, ул. МКАД 46 км Дорога, дом 43, квартира 35');
-
 insert into items (type, price)
 values ('Телефон', round(random() * (5000 - 0) + 0)),
        ('Молоток', round(random() * (5000 - 0) + 0)),
@@ -84,6 +69,7 @@ values ('Телефон', round(random() * (5000 - 0) + 0)),
        ('Сканер', round(random() * (5000 - 0) + 0)),
        ('Вентилятор', round(random() * (5000 - 0) + 0)),
        ('Пылесос', round(random() * (5000 - 0) + 0));
+
 
 insert into orders (count)
 values (1),
@@ -97,17 +83,33 @@ values (1),
        (9),
        (10);
 
+-- year/month/day
+insert into masters (name, lastname, birthday, address, item)
+values ('Александр', 'Кузьмин', '1932/08/12',
+        '121352, г. Красноармейская, ул. Магистральный Переулок, дом 65, квартира 278', 1),
+       ('Роза', 'Лебедева', '1970/01/12', '164549, г. Рыбная Слобода, ул. Одоевского Проезд, дом 80, квартира 128', 1),
+       ('Василиса', 'Баландина', '1960/01/12',
+        '453238, г. Вадинск, ул. Воздвиженский 2-й Переулок, дом 47, квартира 71', 2),
+       ('Викторина', 'Трифонова', '1984/01/12',
+        '453238, г. Вадинск, ул. Воздвиженский 2-й Переулок, дом 47, квартира 71', 1),
+       ('Мая', 'Кудрявцева', '1963/08/11', '453238, г. Вадинск, ул. Воздвиженский 2-й Переулок, дом 47, квартира 71', 1),
+       ('Адам', 'Попов', '1993/08/10', '433252, г. Нилово, ул. Котельнический 5-й Переулок, дом 37, квартира 269', 2),
+       ('Илья', 'Кириллов', '1953/08/09', '453238, г. Вадинск, ул. Воздвиженский 2-й Переулок, дом 47, квартира 71', 1),
+       ('Сергей', 'Бордунов', '1986/08/08', '453238, г. Вадинск, ул. Воздвиженский 2-й Переулок, дом 47, квартира 71', 2),
+       ('Валентин', 'Емельянов', '1996/08/07', '601624, г. Скалистый, ул. Подсосенский Переулок, дом 66, квартира 280', 1),
+       ('Жора', 'Власов', '1968/08/06', '428014, г. Яровое, ул. МКАД 46 км Дорога, дом 43, квартира 35', 1);
+
 --endregion
 
 -- region CREATE LINKED TABLE
 
 create table if not exists work
 (
-  id serial primary key,
-  master int references masters(id),
-  item int references items(id),
+  id      serial primary key,
+  master  int references masters (id),
+  item    int references items (id),
   created date default now() check ( created <= now()),
-  price int check ( price > 0 )
+  price   int check ( price > 0 )
 );
 
 -- endregion
