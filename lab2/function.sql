@@ -17,20 +17,3 @@ $$ language plpgsql;
 
 -- Add 1000 random elements into cities table
 select add_n(1000);
-
--- Execute explain without index
-explain analyse select *
-                from items
-                where price < 2500;
-
-explain analyse select *
-                from items
-                where price > 2500;
-
-explain analyse select *
-                from items
-                where price = 2500;
-
-explain analyse select *
-                from items
-                where price between 1000 and 2500;
