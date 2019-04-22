@@ -15,7 +15,7 @@ create table exam
 );
 
 insert into exam (master, rating)
-values (1, [0, 1, null, 10, null]);
+values (1, array [0, 1, null, 10, null]);
 
 insert into exam (master)
 values (2),

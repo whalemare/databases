@@ -1,4 +1,5 @@
 -- Найти всех мастеров, чья работа стоит более 500 р.
+
 create or replace view expensive_masters as (
   select masters.id,
          name,

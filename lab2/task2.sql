@@ -6,4 +6,5 @@ create or replace view young_masters as (
   where age(birthday) < interval '30 year' and item = 1
 );
 
-select * from young_masters
+select * from young_masters;
+
