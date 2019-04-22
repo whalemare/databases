@@ -106,10 +106,8 @@ create table if not exists work
   id serial primary key,
   master int references masters(id),
   item int references items(id),
-  created date default now(),
+  created date default now() check ( created >= now()),
   price int check ( price > 0 )
 );
 
 -- endregion
-
-
