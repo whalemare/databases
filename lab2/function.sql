@@ -8,28 +8,29 @@ BEGIN
   select max(id) into t from cities;
   for i in (t + 1)..(count + t)
     loop
-      insert into cities(name) values (md5(random()::text));
+      insert into items(type, price) values (md5(random()::text), round(random() * (5000 - 1000) + 1000));
     end loop;
   return 'Done';
 end;
 $$ language plpgsql;
 
--- create function getRandomString(length integer) returns varchar as
--- $$
--- declare
---   chars  text[]  := '{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z}';
---   result text    := '';
---   i      integer := 0;
--- begin
---   if length < 0 then
---     raise exception 'Given length cannot be less than 0';
---   end if;
---   for i in 1..length
---     loop
---       result := result || chars [ 1 + random() * (array_length(chars, 1) - 1)];
---     end loop;
---   return result;
--- end;
--- $$ language plpgsql;
 
+-- Add 1000 random elements into cities table
+select add_n(1000);
 
+-- Execute explain without index
+explain analyse select *
+                from items
+                where price < 2500;
+
+explain analyse select *
+                from items
+                where price > 2500;
+
+explain analyse select *
+                from items
+                where price = 2500;
+
+explain analyse select *
+                from items
+                where price between 1000 and 2500;
