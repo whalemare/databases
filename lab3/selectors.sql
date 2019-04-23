@@ -16,5 +16,8 @@ select schedule from busy;
 
 select schedule[1][1] as monday_half_day_busy from busy;
 
--- selector array_dims
+-- selector with [:]
+select schedule[1:1] from busy;
 
+-- selector with array_dims
+select array_dims(schedule) from busy;
