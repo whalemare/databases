@@ -13,6 +13,7 @@ cat lab2/task3.sql >> init.sql
 # lab3
 cat lab3/arrays.sql >> init.sql
 cat lab3/selectors.sql >> init.sql
+cat lab3/update.sql >> init.sql
 
 docker kill $(docker ps -q)
 docker rm $(docker ps -a -q)
