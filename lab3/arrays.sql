@@ -1,4 +1,4 @@
-create table exam
+create table if not exists exam
 (
   id     serial primary key,
   master int references masters (id),
