@@ -22,10 +22,21 @@ create or replace view shops_repair_n as (
              inner join shops on shop_can_repair.shop = shops.id
     where item = 1
 );
+select * from shops_repair_n;
 
 -- Количество мастерских ремонтирующих товар N
 select count(*) from shops_repair_n;
 
--- Количество мастерских ремонтирующих товары А и Б
+-- Количество ремонтируемых товаров в мастерских одновременно ремонтирующих товары А и Б
+create or replace view shops_repair_items as (
+    select shops.name, count(items.type)
+    from shop_can_repair
+             inner join items on shop_can_repair.item = items.id
+             inner join shops on shop_can_repair.shop = shops.id
+    where item = 1 or item = 2
+    group by shops.name
+);
+select * from shops_repair_items;
 
-
+-- Количество мастерских ремонтирующих одновременно товары А и Б
+select count(*) from shops_repair_items;
