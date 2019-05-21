@@ -15,7 +15,7 @@ group by cities.name
 order by count;
 
 -- Мастерские ремонтирующие товар N
-create or replace function shops_repair_item(itemName varchar)
+create or replace function shops_repair_item(itemName varchar, cityName varchar)
     returns table
             (
                 name varchar
@@ -26,11 +26,13 @@ DECLARE
     variable record;
 BEGIN
     for variable in (
-        select shops.name, items.type
+        select shops.name, items.type, cities.name
         from shop_can_repair
                  inner join items on shop_can_repair.item = items.id
                  inner join shops on shop_can_repair.shop = shops.id
+                 inner join cities on shops.city = cities.id
         where items.type = itemName
+          and cities.name = cityName
     )
         loop
             name := variable.name;
@@ -39,25 +41,39 @@ BEGIN
 end
 $$ language plpgsql;
 
-select * from shops_repair_item('Молоток');
+create or replace function shops_repair_items(firstItem varchar, lastItem varchar, cityName varchar)
+    returns table
+            (
+                name varchar
+            )
+as
+$$
+DECLARE
+    variable record;
+BEGIN
+    for variable in (
+        select *
+        from shops_repair_item(firstItem, cityName)
+    )
+        loop
+            name := variable.name;
+            return next;
+        end loop;
 
--- Количество мастерских ремонтирующих товар N
--- select count(*)
--- from shops_repair_n;
+    for variable in (
+        select *
+        from shops_repair_item(lastItem, cityName)
+    )
+        loop
+            name := variable.name;
+            return next;
+        end loop;
+end
+$$ language plpgsql;
 
--- Количество ремонтируемых товаров в мастерских одновременно ремонтирующих товары А и Б
-create or replace view shops_repair_items as (
-    select shops.name, count(items.type)
-    from shop_can_repair
-             inner join items on shop_can_repair.item = items.id
-             inner join shops on shop_can_repair.shop = shops.id
-    where item = 1
-       or item = 2
-    group by shops.name
-);
+-- Мастерские ремонтирующие товар в городе
 select *
-from shops_repair_items;
+from shops_repair_item('Молоток', 'Новосибирск');
 
--- Количество мастерских ремонтирующих одновременно товары А и Б
-select count(*)
-from shops_repair_items;
+-- Мастерские ремонтирующие несколько товаров в городе
+select distinct * from shops_repair_items('Принтер', 'Сканер', 'Сургут');
