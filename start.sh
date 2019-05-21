@@ -17,6 +17,9 @@ cat lab3/update.sql >> init.sql
 
 # lab4
 cat lab4/migration4.sql >> init.sql
+cat lab4/task1.sql >> init.sql
+cat lab4/task2.sql >> init.sql
+cat lab4/task3.sql >> init.sql
 
 docker kill $(docker ps -q)
 docker rm $(docker ps -a -q)
