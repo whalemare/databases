@@ -1997,6 +1997,29 @@ REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
+-- Проверка 1
+select zpstadion_max();
+select * from stadion;
+
+-- Проверка 2
+select zpstadion_avg();
+select * from stadion;
+
+-- Проверка 3
+select zpstadion_min();
+select * from stadion;
+
+-- Проверка 4
+select population();
+select * from population_club;
+
+-- Проверка 5
+select reiting('01-02-2019','06-06-2019');
+select * from reiting;
+
+-- Проверка 6
+select effective();
+select * from effective;
 
 --
 -- PostgreSQL database dump complete
