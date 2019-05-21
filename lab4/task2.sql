@@ -72,8 +72,10 @@ end
 $$ language plpgsql;
 
 -- Мастерские ремонтирующие товар в городе
-select *
-from shops_repair_item('Молоток', 'Новосибирск');
+select * from shops_repair_item('Молоток', 'Новосибирск');
+
+-- Количество мастерских
+select count(*) from shops_repair_item('Молоток', 'Новосибирск');
 
 -- Мастерские ремонтирующие несколько товаров в городе
 select distinct * from shops_repair_items('Принтер', 'Сканер', 'Сургут');

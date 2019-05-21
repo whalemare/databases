@@ -73,6 +73,8 @@ $$ language plpgsql;
 
 select * from rating_of_bad_items();
 
+select * from rating_of_bad_item('');
+
 select * from rating_of_bad_item('Молоток');
 
 

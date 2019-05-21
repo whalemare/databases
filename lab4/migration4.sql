@@ -12,29 +12,6 @@ values ('Samsung'),
        ('IKEA'),
        ('TrotoPoto');
 
--- информация о предметах, которая может делать производитель
-create table fabric_can_make
-(
-    id     serial primary key,
-    fabric int references fabrics (id),
-    item   int references items (id)
-);
-
-insert into fabric_can_make(fabric, item)
-values (1, 5),
-       (1, 1),
-       (1, 2),
-       (1, 3),
-       (1, 4),
-       (2, 5),
-       (3, 1),
-       (3, 1),
-       (4, 2),
-       (4, 8),
-       (5, 7),
-       (5, 9),
-       (5, 10);
-
 -- информация о гарантийных мастерских в разных городах и товарах
 create table shops
 (

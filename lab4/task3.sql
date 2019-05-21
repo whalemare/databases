@@ -28,7 +28,6 @@ BEGIN
 end
 $$ language plpgsql;
 
--- Количество отремонтрованных товаров в магазине
 create or replace function count_of_repairs(searchShopName varchar)
     returns table
             (
